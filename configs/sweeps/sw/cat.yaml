@@ -1,0 +1,40 @@
+# CTR model
+method: random
+metric:
+  goal: minimize
+  name: val_loss
+parameters:
+  dim_hidden_treatment:
+    distribution: int_uniform
+    min: 50
+    max: 300
+  dim_output_treatment:
+    distribution: int_uniform
+    min: 1
+    max: 100
+  dim_hidden_covariates:
+    distribution: int_uniform
+    min: 50
+    max: 300
+  dim_output_covariates:
+    distribution: int_uniform
+    min: 1
+    max: 100
+  num_treatment_layer:
+    distribution: int_uniform
+    min: 3
+    max: 6
+  num_covariates_layer:
+    distribution: int_uniform
+    min: 2
+    max: 4
+  num_final_ff_layer:
+    distribution: int_uniform
+    min: 2
+    max: 6
+  lr:
+    distribution: categorical
+    values:
+      - 0.001
+      - 0.0005
+program: run_model.py

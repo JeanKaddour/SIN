@@ -1,0 +1,61 @@
+# GIN
+method: random
+metric:
+  goal: minimize
+  name: val_loss
+parameters:
+  dim_hidden_treatment:
+    distribution: int_uniform
+    min: 100
+    max: 400
+  dim_hidden_covariates:
+    distribution: int_uniform
+    min: 100
+    max: 400
+  dim_hidden_propensity:
+    distribution: int_uniform
+    min: 10
+    max: 50
+  dim_hidden_como:
+    distribution: int_uniform
+    min: 100
+    max: 300
+  dim_output:
+    distribution: int_uniform
+    min: 200
+    max: 600
+  num_treatment_layer:
+    distribution: int_uniform
+    min: 3
+    max: 6
+  num_covariates_layer:
+    distribution: int_uniform
+    min: 2
+    max: 5
+  num_como_layers:
+    distribution: int_uniform
+    min: 2
+    max: 4
+  num_propensity_layers:
+    distribution: int_uniform
+    min: 1
+    max: 6
+  num_update_steps_global_objective:
+    distribution: int_uniform
+    min: 10
+    max: 20
+  patience:
+    distribution: categorical
+    values:
+      - 5
+      - 10
+  pro_dropout:
+    distribution: categorical
+    values:
+      - 0.
+  lr:
+    distribution: categorical
+    values:
+      - 0.001
+      - 0.0005
+program: run_model.py

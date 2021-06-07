@@ -1,0 +1,49 @@
+# GraphITE
+method: random
+metric:
+  goal: minimize
+  name: val_loss
+parameters:
+  dim_hidden_treatment:
+    distribution: int_uniform
+    min: 100
+    max: 400
+  dim_hidden_covariates:
+    distribution: int_uniform
+    min: 100
+    max: 400
+  dim_output_treatment:
+    distribution: int_uniform
+    min: 1
+    max: 400
+  dim_output_covariates:
+    distribution: int_uniform
+    min: 1
+    max: 400
+  num_treatment_layer:
+    distribution: int_uniform
+    min: 3
+    max: 6
+  num_covariates_layer:
+    distribution: int_uniform
+    min: 2
+    max: 5
+  num_final_ff_layer:
+    distribution: int_uniform
+    min: 1
+    max: 5
+  lr:
+    distribution: categorical
+    values:
+      - 0.001
+      - 0.0005
+  independence_regularisation_coeff:
+    distribution: categorical
+    values:
+      - 0.001
+      - 0.01
+      - 1
+      - 10
+      - 100
+      - 1000
+program: run_model.py
