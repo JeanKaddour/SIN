@@ -10,7 +10,9 @@ def create_batch_norm_1d_layers(num_layers: int, dim_hidden: int):
     return batch_norm_layers
 
 
-def create_linear_layers(num_layers: int, dim_input: int, dim_hidden: int, dim_output: int):
+def create_linear_layers(
+    num_layers: int, dim_input: int, dim_hidden: int, dim_output: int
+):
     linear_layers = nn.ModuleList()
     # Input layer
     linear_layers.append(nn.Linear(in_features=dim_input, out_features=dim_hidden))
@@ -29,17 +31,36 @@ def init_layers(initialiser_name: str, layers: nn.ModuleList):
 
 
 class MLP(nn.Module):
-
-    def __init__(self, dim_input: int, dim_hidden: int, dim_output: int, num_layers: int, batch_norm: bool,
-                 initialiser: str, dropout: float, activation: str, leaky_relu: float, is_output_activation: bool):
+    def __init__(
+        self,
+        dim_input: int,
+        dim_hidden: int,
+        dim_output: int,
+        num_layers: int,
+        batch_norm: bool,
+        initialiser: str,
+        dropout: float,
+        activation: str,
+        leaky_relu: float,
+        is_output_activation: bool,
+    ):
         super().__init__()
-        self.layers = create_linear_layers(num_layers=num_layers, dim_input=dim_input, dim_hidden=dim_hidden,
-                                           dim_output=dim_output)
+        self.layers = create_linear_layers(
+            num_layers=num_layers,
+            dim_input=dim_input,
+            dim_hidden=dim_hidden,
+            dim_output=dim_output,
+        )
         init_layers(initialiser_name=initialiser, layers=self.layers)
-        self.dropout = nn.Dropout(dropout) if dropout > .0 else None
-        self.batch_norm_layers = create_batch_norm_1d_layers(num_layers=num_layers,
-                                                             dim_hidden=dim_hidden) if batch_norm else None
-        self.activation_function = get_activation(name=activation, leaky_relu=leaky_relu)
+        self.dropout = nn.Dropout(dropout) if dropout > 0.0 else None
+        self.batch_norm_layers = (
+            create_batch_norm_1d_layers(num_layers=num_layers, dim_hidden=dim_hidden)
+            if batch_norm
+            else None
+        )
+        self.activation_function = get_activation(
+            name=activation, leaky_relu=leaky_relu
+        )
         self.is_output_activation = is_output_activation
 
     def forward(self, x: Tensor):

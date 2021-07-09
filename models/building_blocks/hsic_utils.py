@@ -11,8 +11,7 @@ import torch
 
 
 def sigma_estimation(X, Y):
-    """ sigma from median distance
-    """
+    """sigma from median distance"""
     D = distmat(torch.cat([X, Y]))
     D = D.detach().cpu().numpy()
     Itri = np.tril_indices(D.shape[0], -1)
@@ -20,14 +19,13 @@ def sigma_estimation(X, Y):
     med = np.median(Tri)
     if med <= 0:
         med = np.mean(Tri)
-    if med < 1E-2:
-        med = 1E-2
+    if med < 1e-2:
+        med = 1e-2
     return med
 
 
 def distmat(X):
-    """ distance matrix
-    """
+    """distance matrix"""
     r = torch.sum(X * X, 1)
     r = r.view([-1, 1])
     a = torch.mm(X, torch.transpose(X, 0, 1))
@@ -37,24 +35,26 @@ def distmat(X):
 
 
 def kernelmat(X, sigma):
-    """ kernel matrix baker
-    """
+    """kernel matrix baker"""
     m = int(X.size()[0])
     dim = int(X.size()[1]) * 1.0
-    H = torch.eye(m) - (1. / m) * torch.ones([m, m])
+    H = torch.eye(m) - (1.0 / m) * torch.ones([m, m])
     Dxx = distmat(X)
 
     if sigma:
-        variance = 2. * sigma * sigma * X.size()[1]
+        variance = 2.0 * sigma * sigma * X.size()[1]
         Kx = torch.exp(-Dxx / variance).type(torch.FloatTensor)  # kernel matrices
         # print(sigma, torch.mean(Kx), torch.max(Kx), torch.min(Kx))
     else:
         try:
             sx = sigma_estimation(X, X)
-            Kx = torch.exp(-Dxx / (2. * sx * sx)).type(torch.FloatTensor)
+            Kx = torch.exp(-Dxx / (2.0 * sx * sx)).type(torch.FloatTensor)
         except RuntimeError as e:
-            raise RuntimeError("Unstable sigma {} with maximum/minimum input ({},{})".format(
-                sx, torch.max(X), torch.min(X)))
+            raise RuntimeError(
+                "Unstable sigma {} with maximum/minimum input ({},{})".format(
+                    sx, torch.max(X), torch.min(X)
+                )
+            )
 
     Kxc = torch.mm(Kx, H)
 
@@ -63,7 +63,7 @@ def kernelmat(X, sigma):
 
 def distcorr(X, sigma=1.0):
     X = distmat(X)
-    X = torch.exp(-X / (2. * sigma * sigma))
+    X = torch.exp(-X / (2.0 * sigma * sigma))
     return torch.mean(X)
 
 
@@ -80,8 +80,7 @@ def compute_kernel(x, y):
 
 
 def hsic_regular(x, y, sigma=None, use_cuda=True, to_numpy=False):
-    """
-    """
+    """ """
     Kxc = kernelmat(x, sigma)
     Kyc = kernelmat(y, sigma)
     KtK = torch.mul(Kxc, Kyc.t())
@@ -90,8 +89,7 @@ def hsic_regular(x, y, sigma=None, use_cuda=True, to_numpy=False):
 
 
 def hsic_normalized(x, y, sigma=None, use_cuda=True, to_numpy=True):
-    """
-    """
+    """ """
     Pxy = hsic_regular(x, y, sigma, use_cuda)
     Px = torch.sqrt(hsic_regular(x, x, sigma, use_cuda))
     Py = torch.sqrt(hsic_regular(y, y, sigma, use_cuda))

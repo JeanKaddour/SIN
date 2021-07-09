@@ -23,8 +23,7 @@ def graph_to_edges(graph: nx.Graph):
 
 
 def normalize_data(x):
-    x = (x - np.min(x, axis=0)) / (
-            np.max(x, axis=0) - np.min(x, axis=0))
+    x = (x - np.min(x, axis=0)) / (np.max(x, axis=0) - np.min(x, axis=0))
     return x
 
 
@@ -35,10 +34,16 @@ def split_train_val(units, graphs, outcomes, args):
     split = int(np.floor(args.val_size * num_train))
     train_idx, valid_idx = indices[split:], indices[:split]
     train_data, val_data = {}, {}
-    train_data['units'], train_data['graphs'], train_data['outcomes'] = units[train_idx], itemgetter(*train_idx)(
-        graphs), outcomes[train_idx]
-    val_data['units'], val_data['graphs'], val_data['outcomes'] = units[valid_idx], itemgetter(*valid_idx)(graphs), \
-                                                                  outcomes[valid_idx]
+    train_data["units"], train_data["graphs"], train_data["outcomes"] = (
+        units[train_idx],
+        itemgetter(*train_idx)(graphs),
+        outcomes[train_idx],
+    )
+    val_data["units"], val_data["graphs"], val_data["outcomes"] = (
+        units[valid_idx],
+        itemgetter(*valid_idx)(graphs),
+        outcomes[valid_idx],
+    )
     return train_data, val_data
 
 
@@ -46,7 +51,9 @@ def get_treatment_graphs(treatment_ids: list, id_to_graph_dict: dict):
     return [id_to_graph_dict[i] for i in treatment_ids]
 
 
-def get_treatment_one_hot_encodings(treatment_ids: list, id_to_one_hot_encoding_dict: dict):
+def get_treatment_one_hot_encodings(
+    treatment_ids: list, id_to_one_hot_encoding_dict: dict
+):
     return [id_to_one_hot_encoding_dict[i] for i in treatment_ids]
 
 

@@ -15,6 +15,7 @@ We acknowledge the work of Liu et al. and their paper
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
+
 class EarlyStoppingCriterion(object):
     """
     Arguments:
@@ -25,7 +26,7 @@ class EarlyStoppingCriterion(object):
 
     def __init__(self, patience, mode, min_delta=0.0):
         assert patience >= 0
-        assert mode in {'min', 'max'}
+        assert mode in {"min", "max"}
         assert min_delta >= 0.0
         self.patience = patience
         self.mode = mode
@@ -50,10 +51,10 @@ class EarlyStoppingCriterion(object):
             self.best_epoch = epoch
             return True
         else:
-            if self.mode == 'max':
-                self.is_improved = (cur_dev_score > self.best_dev_score + self.min_delta)
+            if self.mode == "max":
+                self.is_improved = cur_dev_score > self.best_dev_score + self.min_delta
             else:
-                self.is_improved = (cur_dev_score < self.best_dev_score - self.min_delta)
+                self.is_improved = cur_dev_score < self.best_dev_score - self.min_delta
 
             if self.is_improved:
                 self._count = 0

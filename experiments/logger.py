@@ -19,8 +19,7 @@ from datetime import timedelta
 from pathlib import Path
 
 
-class LogFormatter():
-
+class LogFormatter:
     def __init__(self):
         self.start_time = time.time()
 
@@ -29,11 +28,11 @@ class LogFormatter():
 
         prefix = "%s - %s - %s" % (
             record.levelname,
-            time.strftime('%x %X'),
-            timedelta(seconds=elapsed_seconds)
+            time.strftime("%x %X"),
+            timedelta(seconds=elapsed_seconds),
         )
         message = record.getMessage()
-        message = message.replace('\n', '\n' + ' ' * (len(prefix) + 3))
+        message = message.replace("\n", "\n" + " " * (len(prefix) + 3))
         return "%s - %s" % (prefix, message)
 
 
@@ -42,7 +41,7 @@ def create_logger(filepath):
     Create a logger.
     """
 
-    Path('log').mkdir(parents=True, exist_ok=True)
+    Path("log").mkdir(parents=True, exist_ok=True)
     # create log formatter
     log_formatter = LogFormatter()
 
