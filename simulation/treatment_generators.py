@@ -2,8 +2,8 @@ import logging
 
 from tqdm import tqdm
 
-from data.tcga.smiles_processing import smiles_to_graph
 from data.tcga.qm9_tcga_simulation import fetch_all_raw_data
+from data.tcga.smiles_processing import smiles_to_graph
 from data.utils import one_of_k_encoding
 from simulation.small_world.treatment_generator import generate_sw_graphs
 

@@ -6,10 +6,10 @@ from experiments.io import save_dataset
 from experiments.logger import create_logger
 from experiments.utils import init_seeds
 from simulation.utils import (
-    get_treatment_assignment_policy,
-    get_outcome_generator,
-    get_data_generator,
     create_dataset,
+    get_data_generator,
+    get_outcome_generator,
+    get_treatment_assignment_policy,
 )
 
 

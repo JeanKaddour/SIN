@@ -5,18 +5,18 @@ import torch
 
 import wandb
 from configs.run_model import sw, tcga
-from data.utils import one_of_k_encoding
 from data.dataset import TestUnits
-from experiments.io import load_train_dataset, load_test_dataset, pickle_dump
+from data.utils import one_of_k_encoding
+from experiments.io import load_test_dataset, load_train_dataset, pickle_dump
 from experiments.logger import create_logger
 from experiments.train import train
 from experiments.utils import (
     compute_graph_embeddings,
     get_ids_with_closest_distance,
+    get_model,
     get_train_and_val_dataset,
+    init_seeds,
 )
-from experiments.utils import get_model
-from experiments.utils import init_seeds
 
 time_str = "{:%Y_%m_%d_%H_%M_%S_%f}".format(datetime.now())
 date_str = "{:%Y_%m_%d}".format(datetime.now())

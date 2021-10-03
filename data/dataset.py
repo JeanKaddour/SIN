@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torch_geometric.data import Data
 
-from data.utils import get_treatment_graphs, get_treatment_combinations
+from data.utils import get_treatment_combinations, get_treatment_graphs
 
 
 class Dataset:

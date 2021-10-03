@@ -1,14 +1,13 @@
-from torch import Tensor
-from torch import cat
+from torch import Tensor, cat
 from torch.nn import functional as F
 from torch_geometric.data.batch import Batch
 
-from models.building_blocks.neural_network import NeuralNetworkEstimator
-from models.building_blocks.outcome_model import OutcomeModel
-from models.building_blocks.treatment_feature_extractor import TreatmentFeatureExtractor
 from models.building_blocks.covariates_feature_extractor import (
     CovariatesFeatureExtractor,
 )
+from models.building_blocks.neural_network import NeuralNetworkEstimator
+from models.building_blocks.outcome_model import OutcomeModel
+from models.building_blocks.treatment_feature_extractor import TreatmentFeatureExtractor
 from models.building_blocks.utils import get_optimizer_scheduler
 
 

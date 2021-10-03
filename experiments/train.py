@@ -1,10 +1,10 @@
 import logging
 from argparse import Namespace
 
-import wandb
 from torch.nn import Module
 from torch_geometric.data import DataLoader
 
+import wandb
 from experiments.early_stopping import EarlyStoppingCriterion
 from experiments.evaluate import test_evaluation, valid_evaluation
 from experiments.io import load_test_dataset

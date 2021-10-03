@@ -1,8 +1,8 @@
 from argparse import Namespace
-from typing import Union, Callable, Optional, Iterator
+from typing import Callable, Iterator, Optional, Union
 
 from torch import nn, optim
-from torch_geometric.nn import GCNConv, GATConv, GraphConv, RGCNConv
+from torch_geometric.nn import GATConv, GCNConv, GraphConv, RGCNConv
 
 
 def get_activation(name: str, leaky_relu: Optional[float] = 0.5) -> nn.Module:

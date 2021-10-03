@@ -3,11 +3,11 @@ from typing import List
 
 import numpy as np
 import torch.nn.functional as F
-import wandb
-from torch import no_grad, nn
+from torch import nn, no_grad
 from torch_geometric.data import Batch
 
-from data.dataset import create_pt_geometric_dataset, TestUnit, TestUnits
+import wandb
+from data.dataset import TestUnit, TestUnits, create_pt_geometric_dataset
 from data.utils import get_treatment_graphs
 
 

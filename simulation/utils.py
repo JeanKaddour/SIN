@@ -1,6 +1,6 @@
 import logging
 from argparse import Namespace
-from typing import Union, Tuple, Callable
+from typing import Callable, Tuple, Union
 
 from data.dataset import Dataset
 from simulation.data_generator import DataGenerator
@@ -14,8 +14,8 @@ from simulation.treatment_generators import (
     generate_id_to_graph_dict_tcga,
 )
 from simulation.unit_generators import (
-    generate_uniform_unit_features,
     generate_TCGA_unit_features,
+    generate_uniform_unit_features,
 )
 
 

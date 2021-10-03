@@ -1,5 +1,5 @@
 import torch.nn.functional as F
-from torch import cat, Tensor
+from torch import Tensor, cat
 from torch_geometric.data.batch import Batch
 
 from models.building_blocks.covariates_feature_extractor import (

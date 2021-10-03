@@ -45,10 +45,11 @@ There are three runnable python scripts:
 * `generate_data.py`: Generates and saves a dataset given the configuration in `configs/generate_data/`.
     * Stores generated data in `data_path` with folder structure `{data_path}/{task}/seed-{seed}/bias-{bias}/`
     * For each `task`, `seed`, and `bias` combination, generates and stores a new dataset
-* `run_model.py`: Trains and evaluates a CATE estimation model given the configuration in `configs/run_model/`.
+* `run_model_training.py`: Trains and evaluates a CATE estimation model given the configuration in `configs/run_model/`.
     * Evaluation results will be logged, can be saved to `results_path` and/or synced to a [wandb.ai](https://wandb.ai/)
       account
-* `run_graph_embeddings.py`: Runs the GNN baseline on a specified dataset and updates one-hot encodings of previously
+* `run_hyperparameter_sweeping.py` Sweeps hyper-parameters with `wandb` as specified in `configs/sweeps/`
+* `run_unseen_treatment_update.py`: Runs the GNN baseline on a specified dataset and updates one-hot encodings of previously
   unseen treatments in the test set to the closest ones seen during training based on their Euclidean space in the
   hidden embedding space.
     * Before running the CAT baseline, run this script. Otherwise, unseen treatment one-hot encodings will be fed into

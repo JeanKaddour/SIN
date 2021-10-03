@@ -1,12 +1,13 @@
 from torch import Tensor, cat
 from torch.nn import functional as F
+
 from models.building_blocks.covariates_feature_extractor import (
     CovariatesFeatureExtractor,
 )
-from models.building_blocks.outcome_model import OutcomeModel
-from models.building_blocks.neural_network import NeuralNetworkEstimator
-from models.building_blocks.utils import get_optimizer_scheduler
 from models.building_blocks.mlp import MLP
+from models.building_blocks.neural_network import NeuralNetworkEstimator
+from models.building_blocks.outcome_model import OutcomeModel
+from models.building_blocks.utils import get_optimizer_scheduler
 
 
 class CategoricalTreatmentRegressionModel(NeuralNetworkEstimator):
