@@ -1,4 +1,4 @@
-# Graph Intervention Networks for Causal Effect Estimation
+# Causal Effect Inference for Structured Treatments
 
 [Link to paper](https://arxiv.org/abs/2106.01939)
 
