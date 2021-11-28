@@ -1,7 +1,8 @@
 from torch import Tensor, nn
 from torch_geometric.nn import BatchNorm, global_mean_pool
 
-from models.building_blocks.utils import get_activation, get_gnn_conv, get_initialiser
+from models.building_blocks.utils import (get_activation, get_gnn_conv,
+                                          get_initialiser)
 
 
 def create_batch_norm_gnn_layers(num_layers: int, dim_hidden: int):

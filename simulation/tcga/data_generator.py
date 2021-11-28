@@ -1,11 +1,8 @@
 import numpy as np
 
 from data.dataset import Dataset, TestUnit, TestUnits
-from simulation.data_generator import (
-    DataGenerator,
-    get_treatment_ids,
-    get_treatment_propensities,
-)
+from simulation.data_generator import (DataGenerator, get_treatment_ids,
+                                       get_treatment_propensities)
 from simulation.outcome_generators import OutcomeGenerator
 from simulation.treatment_assignment import TreatmentAssignmentPolicy
 

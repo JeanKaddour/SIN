@@ -15,14 +15,14 @@ DATE_STR = "{:%Y_%m_%d}".format(datetime.now())
 
 
 def parse_default_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="GraphInterventionNetworks")
+    parser = argparse.ArgumentParser(description="StructuredInterventionNetworks")
     parser.add_argument("--name", type=str, default=TIME_STR)
     parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
     parser.add_argument(
         "--model",
         type=str,
-        default="gin",
-        choices=["gin", "gnn", "graphite", "cat", "zero"],
+        default="sin",
+        choices=["sin", "gnn", "graphite", "cat", "zero"],
     )
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--cuda", type=int, default=0)
@@ -57,16 +57,16 @@ def parse_default_args() -> argparse.Namespace:
     return args
 
 
-if __name__ == "__main__":
+def main():
     args = parse_default_args()
     project_name = (
-        f"GIN_{DATE_STR}-{args.task}-ABL"
+        f"sin_{DATE_STR}-{args.task}-ABL"
         if args.ablation
-        else f"GIN_{DATE_STR}-{args.task}"
+        else f"sin_{DATE_STR}-{args.task}"
     )
-    wandb.init(project=project_name, name=args.model + "-" + str(args.seed))
-
-    wandb.config.update(args)
+    wandb.init(
+        project=project_name, name=args.model + "-" + str(args.seed), config=args
+    )
     init_seeds(seed=args.seed)
 
     logger = create_logger("log/%s.log" % args.name)
@@ -81,3 +81,7 @@ if __name__ == "__main__":
         time_str=TIME_STR,
         args=args,
     )
+
+
+if __name__ == "__main__":
+    main()

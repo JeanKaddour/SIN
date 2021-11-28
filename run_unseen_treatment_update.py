@@ -10,13 +10,9 @@ from data.utils import one_of_k_encoding
 from experiments.io import load_test_dataset, load_train_dataset, pickle_dump
 from experiments.logger import create_logger
 from experiments.train import train
-from experiments.utils import (
-    compute_graph_embeddings,
-    get_ids_with_closest_distance,
-    get_model,
-    get_train_and_val_dataset,
-    init_seeds,
-)
+from experiments.utils import (compute_graph_embeddings,
+                               get_ids_with_closest_distance, get_model,
+                               get_train_and_val_dataset, init_seeds)
 
 time_str = "{:%Y_%m_%d_%H_%M_%S_%f}".format(datetime.now())
 date_str = "{:%Y_%m_%d}".format(datetime.now())
@@ -70,10 +66,10 @@ def update_one_hot_encodings(
     pickle_dump(file_name=file_path + "test.p", content=test_units)
 
 
-if __name__ == "__main__":
+def main():
     args = parse_default_args()
     wandb.init(
-        project=f"GIN_EMB_{date_str}-{args.task}",
+        project=f"sin_EMB_{date_str}-{args.task}",
         name=args.model + "-" + str(args.seed),
     )
     wandb.config.update(args)
@@ -133,3 +129,7 @@ if __name__ == "__main__":
         logger.info("Successfully updated one-hot encodings of unseen treatments")
     else:
         logger.info("There are no unseen treatments.")
+
+
+if __name__ == "__main__":
+    main()

@@ -7,7 +7,7 @@ class TreatmentFeatureExtractor(nn.Module):
     def __init__(self, args):
         super(TreatmentFeatureExtractor, self).__init__()
         dim_output = (
-            args.dim_output if args.model == "gin" else args.dim_output_covariates
+            args.dim_output if args.model == "sin" else args.dim_output_covariates
         )
         self.treatment_net = GNN(
             gnn_conv=args.gnn_conv,

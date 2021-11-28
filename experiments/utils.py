@@ -10,19 +10,15 @@ import yaml
 from torch_geometric.data.batch import Batch
 
 import wandb
-from data.dataset import (
-    GraphData,
-    TestUnits,
-    create_pt_geometric_dataset,
-    create_pt_geometric_dataset_only_graphs,
-)
+from data.dataset import (GraphData, TestUnits, create_pt_geometric_dataset,
+                          create_pt_geometric_dataset_only_graphs)
 from data.utils import split_train_val
 from experiments.io import load_train_dataset, pickle_dump
 from models.building_blocks.zero_baseline import ZeroBaseline
 from models.cat import CategoricalTreatmentRegressionModel
-from models.gin import GIN
 from models.gnn import GNNRegressionModel
 from models.graphite import GraphITE
+from models.sin import SIN
 
 
 def save_args(args, path: str):
@@ -38,8 +34,8 @@ def get_model(args: Namespace, device) -> th.nn.Module:
         model = GraphITE(args).to(device)
     elif args.model == "zero":
         model = ZeroBaseline(args).to(device)
-    elif args.model == "gin":
-        model = GIN(args).to(device)
+    elif args.model == "sin":
+        model = SIN(args).to(device)
     elif args.model == "cat":
         model = CategoricalTreatmentRegressionModel(args).to(device)
     wandb.watch(model, log="all", log_freq=args.log_interval)
@@ -90,7 +86,7 @@ def get_ids_with_closest_distance(
 
 def save_run_results(
     test_units_with_predictions: TestUnits,
-    test_errors: np.ndarray,
+    test_errors: dict,
     time_str: str,
     args: Namespace,
 ) -> None:
@@ -136,7 +132,8 @@ def get_train_and_val_dataset(
         treatment_graphs=val_data["graphs"],
         outcomes=val_data["outcomes"],
     )
-
+    assert train_data is not None
+    assert val_data_pt is not None
     return train_data_pt, val_data_pt
 
 

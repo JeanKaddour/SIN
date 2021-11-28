@@ -17,7 +17,7 @@ def parse_default_args():
     parser.add_argument("--name", type=str, default=TIME_STR)
     parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
     parser.add_argument(
-        "--model", type=str, default="gin", choices=["gin", "gnn", "graphite", "cat"]
+        "--model", type=str, default="sin", choices=["sin", "gnn", "graphite", "cat"]
     )
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--cuda", type=int, default=0)
@@ -42,12 +42,12 @@ def add_name(name: str, config_dict: dict) -> None:
     config_dict["name"] = name
 
 
-if __name__ == "__main__":
+def main():
     args = parse_default_args()
     project_name = (
-        f"GIN_{DATE_str}-{args.task}-ABL"
+        f"sin_{DATE_str}-{args.task}-ABL"
         if args.ablation
-        else f"GIN_{DATE_str}-{args.task}"
+        else f"sin_{DATE_str}-{args.task}"
     )
     wandb.init(project=project_name)
     wandb.config.update(args)
@@ -65,3 +65,7 @@ if __name__ == "__main__":
     sweep_id = wandb.sweep(sweep_config, project=project_name)
 
     wandb.agent(sweep_id, count=args.num_sweeps)
+
+
+if __name__ == "__main__":
+    main()

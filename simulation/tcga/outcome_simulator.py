@@ -3,7 +3,8 @@ from typing import Union
 import numpy as np
 
 from experiments.utils import sample_uniform_weights
-from simulation.outcome_generators import OutcomeGenerator, generate_outcome_tcga
+from simulation.outcome_generators import (OutcomeGenerator,
+                                           generate_outcome_tcga)
 
 
 class TCGASimulator(OutcomeGenerator):

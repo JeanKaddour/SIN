@@ -8,15 +8,12 @@ from simulation.outcome_generators import OutcomeGenerator
 from simulation.small_world.outcome_simulator import SmallWorldSimulator
 from simulation.tcga.data_generator import TCGADataGenerator
 from simulation.tcga.outcome_simulator import TCGASimulator
-from simulation.treatment_assignment import RandomTAP, TreatmentAssignmentPolicy
-from simulation.treatment_generators import (
-    generate_id_to_graph_dict_sw,
-    generate_id_to_graph_dict_tcga,
-)
-from simulation.unit_generators import (
-    generate_TCGA_unit_features,
-    generate_uniform_unit_features,
-)
+from simulation.treatment_assignment import (RandomTAP,
+                                             TreatmentAssignmentPolicy)
+from simulation.treatment_generators import (generate_id_to_graph_dict_sw,
+                                             generate_id_to_graph_dict_tcga)
+from simulation.unit_generators import (generate_TCGA_unit_features,
+                                        generate_uniform_unit_features)
 
 
 def get_treatment_assignment_policy(treatment_ids: list, args: Namespace) -> RandomTAP:

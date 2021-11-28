@@ -1,11 +1,13 @@
+import argparse
 from abc import ABC
+from typing import Optional
 
 import numpy as np
 
 
 def create_treatment_assignment_dict(
     all_treatment_ids, sorted_selected_idx, propensities_of_selected_treatments
-):
+) -> dict:
     selected_treatment_ids = [all_treatment_ids[id] for id in sorted_selected_idx]
     return {
         "treatment_ids": selected_treatment_ids,
@@ -14,25 +16,27 @@ def create_treatment_assignment_dict(
 
 
 class TreatmentAssignmentPolicy(ABC):
-    def __init__(self, treatment_ids: list, args):
+    def __init__(self, treatment_ids: list, args: argparse.Namespace):
         self.treatment_ids = treatment_ids
         self.bias = args.bias
         self.args = args
 
-    def assign_treatment(self, unit):
+    def assign_treatment(self, unit: np.ndarray):
         pass
 
-    def get_assignments_for_unit(self, unit, num_test_treatments_per_unit: int = 5):
+    def get_assignments_for_unit(
+        self, unit: np.ndarray, mode: str, num_test_treatments_per_unit: int = 5
+    ):
         pass
 
     def __get_most_likely_assignments_for_unit(
-        self, unit, num_test_treatments_per_unit: int = 5
+        self, unit: np.ndarray, num_test_treatments_per_unit: int = 5
     ):
         pass
 
 
 class RandomTAP(TreatmentAssignmentPolicy):
-    def __init__(self, treatment_ids: list, args, weights=None):
+    def __init__(self, treatment_ids: list, args, weights: Optional[np.ndarray] = None):
         super().__init__(treatment_ids, args)
         self.dim_covariates = args.dim_covariates
         self.policy = args.propensity_covariates_preprocessing
@@ -41,20 +45,13 @@ class RandomTAP(TreatmentAssignmentPolicy):
         else:
             self._init_weights()
 
-    def _init_weights_uniform(self):
+    def _init_weights_uniform(self) -> np.ndarray:
         for i in range(len(self.treatment_ids)):
             self.weights[i] = np.random.uniform(
                 size=(self.dim_covariates), low=0.0, high=1.0
             )
 
-    def _init_weights(self):
-        self.weights = np.zeros(shape=(len(self.treatment_ids), self.dim_covariates))
-        if self.args.treatment_assignment_matrix_distribution == "uniform":
-            self._init_weights_uniform()
-        elif self.args.treatment_assignment_matrix_distribution == "normal":
-            self._init_weights_normal()
-
-    def _init_weights_normal(self):
+    def _init_weights_normal(self) -> np.ndarray:
         for i in range(len(self.treatment_ids)):
             self.weights[i] = np.random.multivariate_normal(
                 mean=self.dim_covariates * [0.0],
@@ -62,7 +59,14 @@ class RandomTAP(TreatmentAssignmentPolicy):
                 size=(1),
             )
 
-    def assign_treatment(self, unit):
+    def _init_weights(self) -> np.ndarray:
+        self.weights = np.zeros(shape=(len(self.treatment_ids), self.dim_covariates))
+        if self.args.treatment_assignment_matrix_distribution == "uniform":
+            self._init_weights_uniform()
+        elif self.args.treatment_assignment_matrix_distribution == "normal":
+            self._init_weights_normal()
+
+    def assign_treatment(self, unit: np.ndarray):
         propensity_probabilities = softmax(
             self.bias * np.matmul(self.weights, self.preprocess_covariates(unit))
         )
@@ -71,13 +75,13 @@ class RandomTAP(TreatmentAssignmentPolicy):
         )
         return assigned_treatment
 
-    def preprocess_covariates(self, covariates):
+    def preprocess_covariates(self, covariates: np.ndarray):
         if self.policy == "squared":
             return covariates ** 2
         return covariates
 
     def get_assignments_for_unit(
-        self, unit, mode: str, num_test_treatments_per_unit: int
+        self, unit: np.ndarray, mode: str, num_test_treatments_per_unit: int = 5
     ):
         assignments = None
 
@@ -88,7 +92,7 @@ class RandomTAP(TreatmentAssignmentPolicy):
         return assignments
 
     def __get_most_likely_assignments_for_unit(
-        self, unit, num_test_treatments_per_unit: int = 3
+        self, unit: np.ndarray, num_test_treatments_per_unit: int = 3
     ):
         propensity_probabilities = softmax(
             np.matmul(self.weights, self.preprocess_covariates(unit))
@@ -103,6 +107,6 @@ class RandomTAP(TreatmentAssignmentPolicy):
         )
 
 
-def softmax(x):
+def softmax(x: np.ndarray) -> np.ndarray:
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum(axis=0)

@@ -7,17 +7,17 @@ from torch_geometric.data.batch import Batch
 
 import wandb
 from models.building_blocks.como import COMONet
-from models.building_blocks.covariates_feature_extractor import (
-    CovariatesFeatureExtractor,
-)
+from models.building_blocks.covariates_feature_extractor import \
+    CovariatesFeatureExtractor
 from models.building_blocks.propensity_feature_extractor import PropensityNet
-from models.building_blocks.treatment_feature_extractor import TreatmentFeatureExtractor
+from models.building_blocks.treatment_feature_extractor import \
+    TreatmentFeatureExtractor
 from models.building_blocks.utils import get_optimizer_scheduler
 
 
-class GIN(nn.Module):
+class SIN(nn.Module):
     def __init__(self, args: Namespace):
-        super(GIN, self).__init__()
+        super(SIN, self).__init__()
         self.treatment_net = TreatmentFeatureExtractor(args=args)
         self.propensity_net = PropensityNet(args=args)
         self.como_net = COMONet(args=args)

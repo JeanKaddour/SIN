@@ -1,6 +1,7 @@
+import argparse
 import logging
 from abc import ABC
-from typing import List
+from typing import Dict, List
 
 import numpy as np
 
@@ -9,13 +10,13 @@ from simulation.outcome_generators import OutcomeGenerator
 from simulation.treatment_assignment import TreatmentAssignmentPolicy
 
 
-def get_treatment_ids(treatment_assignments):
+def get_treatment_ids(treatment_assignments: List[Dict]):
     return [
         unit_treatments["treatment_ids"] for unit_treatments in treatment_assignments
     ]
 
 
-def get_treatment_propensities(treatment_assignments):
+def get_treatment_propensities(treatment_assignments: List[Dict]):
     return [
         unit_treatments["propensities"] for unit_treatments in treatment_assignments
     ]
@@ -29,7 +30,7 @@ class AbstractDataGenerator(ABC):
         outcome_generator: OutcomeGenerator,
         in_sample_dataset: Dataset,
         out_sample_dataset: Dataset,
-        args,
+        args: argparse.Namespace,
     ):
         self.id_to_graph_dict = id_to_graph_dict
         self.treatment_assignment_policy = treatment_assignment_policy
@@ -38,13 +39,13 @@ class AbstractDataGenerator(ABC):
         self.out_sample_dataset = out_sample_dataset
         self.args = args
 
-    def get_train_assignments(self, units) -> list:
+    def get_train_assignments(self, units: np.ndarray) -> list:
         return [
             self.treatment_assignment_policy.assign_treatment(unit) for unit in units
         ]
 
     def get_test_assignments(
-        self, units, mode: str, num_test_treatments_per_unit: int
+        self, units: np.ndarray, mode: str, num_test_treatments_per_unit: int
     ) -> list:
         return [
             self.treatment_assignment_policy.get_assignments_for_unit(
@@ -64,7 +65,7 @@ class DataGenerator(AbstractDataGenerator):
         outcome_generator: OutcomeGenerator,
         in_sample_dataset: Dataset,
         out_sample_dataset: Dataset,
-        args,
+        args: argparse.Namespace,
     ):
         super().__init__(
             id_to_graph_dict,
@@ -86,8 +87,10 @@ class DataGenerator(AbstractDataGenerator):
         self.in_sample_dataset.add_outcomes(outcomes=outcomes)
 
     def get_unseen_treatments(
-        self, in_sample_treatment_assignments, out_sample_treatment_assignments
-    ) -> list:
+        self,
+        in_sample_treatment_assignments: List[Dict],
+        out_sample_treatment_assignments: List[Dict],
+    ) -> List:
         in_sample_ids = get_treatment_ids(in_sample_treatment_assignments)
         out_sample_ids = get_treatment_ids(out_sample_treatment_assignments)
         all_test_ids = np.concatenate((in_sample_ids, out_sample_ids)).flatten()
@@ -96,7 +99,9 @@ class DataGenerator(AbstractDataGenerator):
         set_unseen_test_ids = set_test_ids - set_train_ids
         return list(set_unseen_test_ids)
 
-    def generate_test_units(self, test_units, test_assignments) -> List[TestUnit]:
+    def generate_test_units(
+        self, test_units: np.ndarray, test_assignments: List[Dict]
+    ) -> List[TestUnit]:
         test_data = []
         test_assignments_ids = get_treatment_ids(test_assignments)
         treatment_propensities = get_treatment_propensities(test_assignments)

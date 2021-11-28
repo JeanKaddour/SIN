@@ -1,4 +1,4 @@
-# GIN
+# SIN
 method: random
 metric:
   goal: minimize
@@ -6,24 +6,24 @@ metric:
 parameters:
   dim_hidden_treatment:
     distribution: int_uniform
-    min: 50
-    max: 300
+    min: 100
+    max: 400
   dim_hidden_covariates:
     distribution: int_uniform
-    min: 50
-    max: 200
+    min: 100
+    max: 400
   dim_hidden_propensity:
     distribution: int_uniform
-    min: 50
-    max: 150
+    min: 10
+    max: 50
   dim_hidden_como:
     distribution: int_uniform
-    min: 200
+    min: 100
     max: 300
   dim_output:
     distribution: int_uniform
-    min: 50
-    max: 250
+    min: 200
+    max: 600
   num_treatment_layer:
     distribution: int_uniform
     min: 3
@@ -31,14 +31,14 @@ parameters:
   num_covariates_layer:
     distribution: int_uniform
     min: 2
-    max: 4
+    max: 5
   num_como_layers:
     distribution: int_uniform
     min: 2
     max: 4
   num_propensity_layers:
     distribution: int_uniform
-    min: 3
+    min: 1
     max: 6
   num_update_steps_global_objective:
     distribution: int_uniform
@@ -47,26 +47,15 @@ parameters:
   patience:
     distribution: categorical
     values:
-      - 1
       - 5
-  como_patience:
+      - 10
+  pro_dropout:
     distribution: categorical
     values:
-      - 10
-      - 5
+      - 0.
   lr:
     distribution: categorical
     values:
       - 0.001
       - 0.0005
-  como_dropout:
-    distribution: categorical
-    values:
-      - 0.2
-      - 0.
-  pro_dropout:
-    distribution: categorical
-    values:
-      - 0.
-      - 0.2
 program: run_model.py

@@ -1,9 +1,9 @@
+import torch
 from torch import Tensor, cat
 from torch.nn import functional as F
 
-from models.building_blocks.covariates_feature_extractor import (
-    CovariatesFeatureExtractor,
-)
+from models.building_blocks.covariates_feature_extractor import \
+    CovariatesFeatureExtractor
 from models.building_blocks.mlp import MLP
 from models.building_blocks.neural_network import NeuralNetworkEstimator
 from models.building_blocks.outcome_model import OutcomeModel
@@ -11,7 +11,7 @@ from models.building_blocks.utils import get_optimizer_scheduler
 
 
 class CategoricalTreatmentRegressionModel(NeuralNetworkEstimator):
-    def __init__(self, args):
+    def __init__(self, args) -> None:
         super(CategoricalTreatmentRegressionModel, self).__init__(args)
         self.treatment_net = MLP(
             dim_input=args.num_treatments,
@@ -31,12 +31,12 @@ class CategoricalTreatmentRegressionModel(NeuralNetworkEstimator):
             args=args, model=self
         )
 
-    def loss(self, prediction: Tensor, batch):
+    def loss(self, prediction: Tensor, batch) -> Tensor:
         target_outcome = batch.y
         outcome_loss = F.mse_loss(input=prediction.view(-1), target=target_outcome)
         return outcome_loss
 
-    def forward(self, batch):
+    def forward(self, batch) -> Tensor:
         covariates, treatment_one_hot_encoding = (
             batch.covariates,
             batch.one_hot_encoding,

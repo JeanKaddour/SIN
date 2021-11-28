@@ -71,7 +71,7 @@ There are three runnable python scripts:
 ### Important arguments
 
 * `task`: Simulation `sw` or `tcga`
-* `model`: `gin`, `gnn`, `cat`, `graphite`, `zero`
+* `model`: `SIN`, `gnn`, `cat`, `graphite`, `zero`
 * `bias`: Treatment selection bias coefficient
 * `seed`: Random seed
 

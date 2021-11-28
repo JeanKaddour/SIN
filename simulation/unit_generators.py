@@ -3,7 +3,8 @@ from typing import Tuple
 
 import numpy as np
 
-from data.tcga.qm9_tcga_simulation import get_TCGA_pca_data, get_TCGA_unit_features
+from data.tcga.qm9_tcga_simulation import (get_TCGA_pca_data,
+                                           get_TCGA_unit_features)
 
 
 def generate_uniform_unit_features(args: Namespace) -> Tuple[np.ndarray, np.ndarray]:

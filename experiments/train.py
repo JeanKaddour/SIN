@@ -1,10 +1,12 @@
 import logging
 from argparse import Namespace
+from typing import Tuple
 
-from torch.nn import Module
+import torch
 from torch_geometric.data import DataLoader
 
 import wandb
+from data.dataset import TestUnits
 from experiments.early_stopping import EarlyStoppingCriterion
 from experiments.evaluate import test_evaluation, valid_evaluation
 from experiments.io import load_test_dataset
@@ -12,8 +14,12 @@ from experiments.utils import get_model, get_train_and_val_dataset
 
 
 def train(
-    model: Module, train_dataset_pt: list, val_dataset_pt: list, device, args: Namespace
-):
+    model: torch.nn.Module,
+    train_dataset_pt: list,
+    val_dataset_pt: list,
+    device: torch.device,
+    args: Namespace,
+) -> None:
     train_loader = DataLoader(
         dataset=train_dataset_pt,
         batch_size=min(args.batch_size, len(train_dataset_pt)),
@@ -23,7 +29,7 @@ def train(
         dataset=val_dataset_pt, batch_size=min(args.batch_size, len(val_dataset_pt))
     )
     early_stopping = EarlyStoppingCriterion(patience=args.patience, mode="min")
-    if args.model == "gin":
+    if args.model == "sin":
         train_com_model(
             model=model,
             device=device,
@@ -50,7 +56,7 @@ def train(
                 break
 
 
-def train_and_test(args: Namespace, device):
+def train_and_test(args: Namespace, device: torch.device) -> Tuple[TestUnits, dict]:
     model = get_model(args=args, device=device)
     train_dataset_pt, val_dataset_pt = get_train_and_val_dataset(args=args)
     train_loader = DataLoader(
@@ -63,7 +69,7 @@ def train_and_test(args: Namespace, device):
     )
     test_dataset = load_test_dataset(args=args)
     early_stopping = EarlyStoppingCriterion(patience=args.patience, mode="min")
-    if args.model == "gin":
+    if args.model == "sin":
         train_com_model(
             model=model,
             device=device,
@@ -96,12 +102,12 @@ def train_and_test(args: Namespace, device):
 
 
 def train_com_model(
-    model: Module,
-    device,
+    model: torch.nn.Module,
+    device: torch.device,
     train_loader: DataLoader,
     val_loader: DataLoader,
     args: Namespace,
-):
+) -> None:
     com_early_stopping = EarlyStoppingCriterion(patience=args.como_patience, mode="min")
 
     for epoch in range(1, args.max_epochs_como_training + 1):

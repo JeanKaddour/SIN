@@ -95,7 +95,7 @@ def add_params(parser):
     parser.add_argument("--gnn_num_bases", type=int, default=-1)
     parser.add_argument("--gnn_multirelational", type=str2bool, default=False)
 
-    # ------------------------------------------------------ GIN ------------------------------------------------------
+    # ------------------------------------------------------ SIN ------------------------------------------------------
     parser.add_argument("--gnn_weight_decay", type=float, default=0.0)
     parser.add_argument("--dim_output", type=int, default=100)
     parser.add_argument(

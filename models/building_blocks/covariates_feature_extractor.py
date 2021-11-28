@@ -7,7 +7,7 @@ class CovariatesFeatureExtractor(nn.Module):
     def __init__(self, args):
         super(CovariatesFeatureExtractor, self).__init__()
         dim_output = (
-            args.dim_output if args.model == "gin" else args.dim_output_covariates
+            args.dim_output if args.model == "sin" else args.dim_output_covariates
         )
         self.covariates_net = MLP(
             dim_input=args.dim_covariates,

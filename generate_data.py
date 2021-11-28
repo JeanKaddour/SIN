@@ -5,12 +5,9 @@ from configs.generate_data import sw, tcga
 from experiments.io import save_dataset
 from experiments.logger import create_logger
 from experiments.utils import init_seeds
-from simulation.utils import (
-    create_dataset,
-    get_data_generator,
-    get_outcome_generator,
-    get_treatment_assignment_policy,
-)
+from simulation.utils import (create_dataset, get_data_generator,
+                              get_outcome_generator,
+                              get_treatment_assignment_policy)
 
 
 def parse_default_args() -> argparse.Namespace:
@@ -37,7 +34,7 @@ def parse_default_args() -> argparse.Namespace:
     return args
 
 
-if __name__ == "__main__":
+def main() -> None:
     args = parse_default_args()
     logger = create_logger("log/%s.log" % args.name)
     logger.info(args)
@@ -63,3 +60,7 @@ if __name__ == "__main__":
     data_generator.generate_train_data()
     test_units = data_generator.generate_test_data()
     save_dataset(in_sample_dataset=in_sample_dataset, test_units=test_units, args=args)
+
+
+if __name__ == "__main__":
+    main()
