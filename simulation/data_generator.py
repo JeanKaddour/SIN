@@ -31,7 +31,7 @@ class AbstractDataGenerator(ABC):
         in_sample_dataset: Dataset,
         out_sample_dataset: Dataset,
         args: argparse.Namespace,
-    ):
+    ) -> None:
         self.id_to_graph_dict = id_to_graph_dict
         self.treatment_assignment_policy = treatment_assignment_policy
         self.outcome_generator = outcome_generator

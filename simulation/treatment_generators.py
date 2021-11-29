@@ -1,3 +1,4 @@
+import argparse
 import logging
 
 from tqdm import tqdm
@@ -8,7 +9,7 @@ from data.utils import one_of_k_encoding
 from simulation.small_world.treatment_generator import generate_sw_graphs
 
 
-def generate_id_to_graph_dict_sw(args):
+def generate_id_to_graph_dict_sw(args: argparse.Namespace) -> dict:
     treatments_list = generate_sw_graphs(
         num_graphs=args.num_graphs,
         min_nodes=args.min_num_nodes,
@@ -32,7 +33,7 @@ def generate_id_to_graph_dict_sw(args):
     return id_to_graph_dict
 
 
-def generate_id_to_graph_dict_tcga(args):
+def generate_id_to_graph_dict_tcga(args: argparse.Namespace) -> dict:
     raw_data = fetch_all_raw_data(num_graphs=args.num_graphs)
     id_to_graph_dict = {}
     all_ids = list(range(args.num_graphs))

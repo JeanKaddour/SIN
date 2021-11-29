@@ -11,11 +11,13 @@ class OutcomeGenerator(ABC):
         self.noise_std = noise_std
         self.id_to_graph_dict = id_to_graph_dict
 
-    def _sample_noise(self):
+    def _sample_noise(self) -> float:
         return np.random.normal(loc=self.noise_mean, scale=self.noise_std)
 
 
-def generate_outcome_sw(covariates, graph_features, random_weights):
+def generate_outcome_sw(
+    covariates: np.ndarray, graph_features: list, random_weights: np.ndarray
+) -> float:
     baseline_effect = 100.0 * np.dot(random_weights[0], covariates)
     treatment_effect = (
         0.2 * graph_features[0] ** 2 * np.dot(random_weights[1], covariates)
@@ -24,7 +26,12 @@ def generate_outcome_sw(covariates, graph_features, random_weights):
     return baseline_effect + treatment_effect
 
 
-def generate_outcome_tcga(unit_features, pca_features, prop, random_weights):
+def generate_outcome_tcga(
+    unit_features: np.ndarray,
+    pca_features: np.ndarray,
+    prop: np.ndarray,
+    random_weights: np.ndarray,
+) -> float:
     baseline_effect = 10.0 * np.dot(random_weights[0], unit_features)
     treatment_effect = np.dot(prop[:8], pca_features) * 0.01
     return baseline_effect + treatment_effect

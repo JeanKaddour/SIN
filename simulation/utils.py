@@ -1,6 +1,6 @@
 import logging
 from argparse import Namespace
-from typing import Callable, Tuple, Union
+from typing import Optional, Tuple, Union
 
 from data.dataset import Dataset
 from simulation.data_generator import DataGenerator
@@ -22,7 +22,7 @@ def get_treatment_assignment_policy(treatment_ids: list, args: Namespace) -> Ran
 
 def get_outcome_generator(
     id_to_graph_dict: dict, args: Namespace
-) -> Union[None, OutcomeGenerator]:
+) -> Optional[OutcomeGenerator]:
     outcome_generator = None
 
     if args.task == "sw":
@@ -75,7 +75,9 @@ def get_data_generator(
     return data_generator
 
 
-def get_unit_generator(args: Namespace) -> Callable:
+def get_unit_generator(
+    args: Namespace,
+) -> Union[generate_uniform_unit_features, generate_TCGA_unit_features]:
     if args.task == "tcga":
         return generate_TCGA_unit_features
     unit_generator = None
@@ -84,7 +86,9 @@ def get_unit_generator(args: Namespace) -> Callable:
     return unit_generator
 
 
-def get_treatment_generator(args: Namespace) -> Callable:
+def get_treatment_generator(
+    args: Namespace,
+) -> Union[generate_id_to_graph_dict_sw, generate_id_to_graph_dict_tcga]:
     treatment_generator = None
     if args.task == "sw":
         treatment_generator = generate_id_to_graph_dict_sw
@@ -94,7 +98,11 @@ def get_treatment_generator(args: Namespace) -> Callable:
 
 
 def create_dataset_dicts(
-    unit_generator, treatment_generator, args: Namespace
+    unit_generator: Union[generate_uniform_unit_features, generate_TCGA_unit_features],
+    treatment_generator: Union[
+        generate_id_to_graph_dict_sw, generate_id_to_graph_dict_tcga
+    ],
+    args: Namespace,
 ) -> Tuple[dict, dict, dict]:
     in_sample_dataset_dict, out_sample_dataset_dict = {}, {}
     logging.info("Generate units...")

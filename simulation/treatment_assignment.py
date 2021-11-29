@@ -40,31 +40,21 @@ class RandomTAP(TreatmentAssignmentPolicy):
         super().__init__(treatment_ids, args)
         self.dim_covariates = args.dim_covariates
         self.policy = args.propensity_covariates_preprocessing
-        if weights:
-            self.weights = weights
-        else:
-            self._init_weights()
+        self.weights = weights if weights else self.sample_weights()
 
-    def _init_weights_uniform(self) -> np.ndarray:
+    def sample_weights(self) -> np.ndarray:
+        weights = np.zeros(shape=(len(self.treatment_ids), self.dim_covariates))
         for i in range(len(self.treatment_ids)):
-            self.weights[i] = np.random.uniform(
-                size=(self.dim_covariates), low=0.0, high=1.0
+            weights[i] = (
+                np.random.uniform(size=(self.dim_covariates), low=0.0, high=1.0)
+                if self.args.treatment_assignment_matrix_distribution == "uniform"
+                else np.random.multivariate_normal(
+                    mean=self.dim_covariates * [0.0],
+                    cov=1.0 * np.eye(self.dim_covariates),
+                    size=(1),
+                )
             )
-
-    def _init_weights_normal(self) -> np.ndarray:
-        for i in range(len(self.treatment_ids)):
-            self.weights[i] = np.random.multivariate_normal(
-                mean=self.dim_covariates * [0.0],
-                cov=1.0 * np.eye(self.dim_covariates),
-                size=(1),
-            )
-
-    def _init_weights(self) -> np.ndarray:
-        self.weights = np.zeros(shape=(len(self.treatment_ids), self.dim_covariates))
-        if self.args.treatment_assignment_matrix_distribution == "uniform":
-            self._init_weights_uniform()
-        elif self.args.treatment_assignment_matrix_distribution == "normal":
-            self._init_weights_normal()
+        return weights
 
     def assign_treatment(self, unit: np.ndarray):
         propensity_probabilities = softmax(
