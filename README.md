@@ -26,7 +26,7 @@ numpy
 networkx
 scikit-learn
 torch
-torch-geometric
+pyg
 wandb
 ```
 

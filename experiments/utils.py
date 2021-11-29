@@ -7,10 +7,11 @@ from typing import List, Tuple
 import numpy as np
 import torch as th
 import yaml
+from torch_geometric.data import Data
 from torch_geometric.data.batch import Batch
 
 import wandb
-from data.dataset import (GraphData, TestUnits, create_pt_geometric_dataset,
+from data.dataset import (TestUnits, create_pt_geometric_dataset,
                           create_pt_geometric_dataset_only_graphs)
 from data.utils import split_train_val
 from experiments.io import load_train_dataset, pickle_dump
@@ -27,17 +28,14 @@ def save_args(args, path: str):
 
 
 def get_model(args: Namespace, device) -> th.nn.Module:
-    model = None
-    if args.model == "gnn":
-        model = GNNRegressionModel(args).to(device)
-    elif args.model == "graphite":
-        model = GraphITE(args).to(device)
-    elif args.model == "zero":
-        model = ZeroBaseline(args).to(device)
-    elif args.model == "sin":
-        model = SIN(args).to(device)
-    elif args.model == "cat":
-        model = CategoricalTreatmentRegressionModel(args).to(device)
+    str_to_model_dict = {
+        "gnn": GNNRegressionModel,
+        "graphite": GraphITE,
+        "zero": ZeroBaseline,
+        "sin": SIN,
+        "cat": CategoricalTreatmentRegressionModel,
+    }
+    model = str_to_model_dict[args.model](args=args).to(device)
     wandb.watch(model, log="all", log_freq=args.log_interval)
 
     return model
@@ -110,7 +108,7 @@ def read_yaml(path: str) -> dict:
 
 def get_train_and_val_dataset(
     args: Namespace,
-) -> Tuple[List[GraphData], List[GraphData]]:
+) -> Tuple[List[Data], List[Data]]:
     in_sample_data = load_train_dataset(args=args)
     units = (
         in_sample_data.get_units()["features"]
@@ -139,7 +137,7 @@ def get_train_and_val_dataset(
 
 def get_train_and_val_pt_datasets(
     units: list, graphs: list, outcomes: list, args: Namespace
-) -> Tuple[List[GraphData], List[GraphData]]:
+) -> Tuple[List[Data], List[Data]]:
     train_data, val_data = split_train_val(
         units=units, graphs=graphs, outcomes=outcomes, args=args
     )

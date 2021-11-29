@@ -5,6 +5,7 @@ import numpy as np
 import torch.nn.functional as F
 from torch import nn, no_grad
 from torch_geometric.data import Batch
+from tqdm import tqdm
 
 import wandb
 from data.dataset import TestUnit, TestUnits, create_pt_geometric_dataset
@@ -31,11 +32,16 @@ def valid_evaluation(
 
 
 def predict_outcomes(
-    model: nn.Module, device, test_units: List[TestUnit], id_to_graph_dict: dict
+    model: nn.Module,
+    device,
+    test_units: List[TestUnit],
+    id_to_graph_dict: dict,
+    unit_description: str,
 ) -> None:
     """Predicts and stores (pseudo-)outcomes for model evaluation."""
     model.eval()
-    for i, test_unit in enumerate(test_units):
+    logging.info(f"Inference on {unit_description} units...")
+    for i, test_unit in enumerate(tqdm(test_units)):
         treatment_ids = test_unit.get_treatment_ids()
         treatment_graphs = get_treatment_graphs(
             treatment_ids=treatment_ids, id_to_graph_dict=id_to_graph_dict
@@ -60,19 +66,21 @@ def test_evaluation(model: nn.Module, device, test_dataset: TestUnits, args) -> 
         device=device,
         test_units=test_dataset.get_test_units(in_sample=True),
         id_to_graph_dict=id_to_graph_dict,
+        unit_description="in-sample",
     )
     predict_outcomes(
         model=model,
         device=device,
         test_units=test_dataset.get_test_units(in_sample=False),
         id_to_graph_dict=id_to_graph_dict,
+        unit_description="out-sample",
     )
     test_errors = {}
     for k in range(args.min_test_assignments, args.max_test_assignments + 1):
-
+        logging.info(f"Evaluate errors for K={k}...")
         test_errors[k] = {"in_sample": {}, "out_sample": {}}
         unweighted_errors_in_sample, weighted_errors_in_sample = [], []
-        for test_unit in test_dataset.get_test_units(in_sample=True):
+        for test_unit in tqdm(test_dataset.get_test_units(in_sample=True)):
             unweighted_error, weighted_error = test_unit.evaluate_predictions(k=k)
             unweighted_errors_in_sample.append(unweighted_error)
             weighted_errors_in_sample.append(weighted_error)

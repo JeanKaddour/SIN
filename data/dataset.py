@@ -192,28 +192,7 @@ class TestUnits:
         return self.unseen_treatment_ids
 
 
-class GraphData(Data):
-    def __init__(
-        self,
-        x=None,
-        edge_index=None,
-        edge_attr=None,
-        y=None,
-        pos=None,
-        normal=None,
-        face=None,
-        **kwargs
-    ):
-        super().__init__(x, edge_index, edge_attr, y, pos, normal, face, **kwargs)
-
-    def __cat_dim__(self, key, item):
-        if key in ["covariates", "one_hot_encoding"]:
-            return None
-        else:
-            return super().__cat_dim__(key, item)
-
-
-def create_pt_geometric_dataset_only_graphs(treatment_graphs: list) -> List[GraphData]:
+def create_pt_geometric_dataset_only_graphs(treatment_graphs: list) -> List[Data]:
     data_list = []
     is_multi_relational = "edge_types" in treatment_graphs[0]
     for i in range(len(treatment_graphs)):
@@ -226,7 +205,7 @@ def create_pt_geometric_dataset_only_graphs(treatment_graphs: list) -> List[Grap
         edge_index = torch.LongTensor(edge_index)
         if len(edge_index.shape) == 2:
             edge_index = edge_index.transpose(1, 0)
-        graph_data = GraphData(x=torch.Tensor(features), edge_index=edge_index)
+        graph_data = Data(x=torch.Tensor(np.array(features)), edge_index=edge_index)
         if is_multi_relational:
             graph_data.edge_types = torch.LongTensor(
                 [treatment_graphs[i]["edge_types"]]
@@ -237,8 +216,8 @@ def create_pt_geometric_dataset_only_graphs(treatment_graphs: list) -> List[Grap
 
 
 def create_pt_geometric_dataset(
-    units, treatment_graphs: list, outcomes=None
-) -> List[GraphData]:
+    units: np.ndarray, treatment_graphs: list, outcomes=None
+) -> List[Data]:
     unit_tensor = torch.FloatTensor(units)
     data_list = []
     is_multi_relational = "edge_types" in treatment_graphs[0]
@@ -251,12 +230,14 @@ def create_pt_geometric_dataset(
         )
         one_hot_encoding = torch.FloatTensor(one_hot_encoding)
         edge_index = torch.LongTensor(edge_index)
+        test = unit_tensor[i]
+        test_2 = torch.unsqueeze(unit_tensor[i], 0)
         if len(edge_index.shape) == 2:
             edge_index = edge_index.transpose(1, 0)
-        graph_data = GraphData(
-            x=torch.Tensor(features),
+        graph_data = Data(
+            x=torch.Tensor(np.array(features)),
             edge_index=edge_index,
-            covariates=unit_tensor[i],
+            covariates=torch.unsqueeze(unit_tensor[i], 0),
             one_hot_encoding=one_hot_encoding,
         )
         if outcomes is not None:
