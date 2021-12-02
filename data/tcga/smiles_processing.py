@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import numpy as np
 from rdkit import Chem
 
@@ -7,7 +9,7 @@ from data.utils import one_of_k_encoding, one_of_k_encoding_unk
 BOND_DICT = {"SINGLE": 1, "DOUBLE": 2, "TRIPLE": 3, "AROMATIC": 4}
 
 
-def atom_features(atom):
+def atom_features(atom) -> np.ndarray:
     return np.array(
         one_of_k_encoding_unk(
             atom.GetSymbol(),
@@ -69,7 +71,7 @@ def atom_features(atom):
     )
 
 
-def smiles_to_graph(smile):
+def smiles_to_graph(smile: str) -> Tuple[int, List, List, List]:
     mol = Chem.MolFromSmiles(smile)
     edges = []
     edge_types = []

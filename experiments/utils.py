@@ -1,3 +1,4 @@
+import argparse
 import json
 import random
 from argparse import Namespace
@@ -22,7 +23,7 @@ from models.graphite import GraphITE
 from models.sin import SIN
 
 
-def save_args(args, path: str):
+def save_args(args: argparse.Namespace, path: str) -> None:
     with open(path, "w") as f:
         json.dump(args.__dict__, f, indent=2)
 
@@ -130,6 +131,7 @@ def get_train_and_val_dataset(
         treatment_graphs=val_data["graphs"],
         outcomes=val_data["outcomes"],
     )
+
     assert train_data is not None
     assert val_data_pt is not None
     return train_data_pt, val_data_pt

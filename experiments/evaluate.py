@@ -1,10 +1,13 @@
+import argparse
 import logging
 from typing import List
 
 import numpy as np
+import torch
 import torch.nn.functional as F
 from torch import nn, no_grad
 from torch_geometric.data import Batch
+from torch_geometric.loader import DataLoader
 from tqdm import tqdm
 
 import wandb
@@ -13,7 +16,11 @@ from data.utils import get_treatment_graphs
 
 
 def valid_evaluation(
-    model: nn.Module, device, val_loader, epoch: int, val_loss_name: str
+    model: nn.Module,
+    device: torch.device,
+    val_loader: DataLoader,
+    epoch: int,
+    val_loss_name: str,
 ) -> float:
     """Computes the validation loss during training for hyper-parameter tuning and early stopping."""
     model.eval()
@@ -33,7 +40,7 @@ def valid_evaluation(
 
 def predict_outcomes(
     model: nn.Module,
-    device,
+    device: torch.device,
     test_units: List[TestUnit],
     id_to_graph_dict: dict,
     unit_description: str,
@@ -58,7 +65,12 @@ def predict_outcomes(
         test_unit.set_predicted_outcomes(predicted_outcomes=predicted_outcomes_dict)
 
 
-def test_evaluation(model: nn.Module, device, test_dataset: TestUnits, args) -> dict:
+def test_evaluation(
+    model: nn.Module,
+    device: torch.device,
+    test_dataset: TestUnits,
+    args: argparse.Namespace,
+) -> dict:
     """Evaluates model on test data and returns test errors for varying values of K."""
     id_to_graph_dict = test_dataset.get_id_to_graph_dict()
     predict_outcomes(

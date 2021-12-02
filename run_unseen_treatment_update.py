@@ -66,7 +66,7 @@ def update_one_hot_encodings(
     pickle_dump(file_name=file_path + "test.p", content=test_units)
 
 
-def main():
+def main() -> None:
     args = parse_default_args()
     wandb.init(
         project=f"sin_EMB_{date_str}-{args.task}",

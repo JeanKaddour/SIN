@@ -1,8 +1,10 @@
+import argparse
+from typing import Dict, List
+
 import numpy as np
 
 from data.dataset import Dataset, TestUnit, TestUnits
-from simulation.data_generator import (DataGenerator, get_treatment_ids,
-                                       get_treatment_propensities)
+from simulation.data_generator import DataGenerator, get_treatment_ids
 from simulation.outcome_generators import OutcomeGenerator
 from simulation.treatment_assignment import TreatmentAssignmentPolicy
 
@@ -15,7 +17,7 @@ class TCGADataGenerator(DataGenerator):
         outcome_generator: OutcomeGenerator,
         in_sample_dataset: Dataset,
         out_sample_dataset: Dataset,
-        args,
+        args: argparse.ArgumentParser,
     ):
         super().__init__(
             id_to_graph_dict,
@@ -27,9 +29,10 @@ class TCGADataGenerator(DataGenerator):
         )
 
     def generate_train_data(self) -> None:
-        treatment_ids = self.get_train_assignments(
-            units=self.in_sample_dataset.get_units()["features"]
-        )
+        treatment_ids = [
+            self.treatment_assignment_policy.assign_treatment(unit)
+            for unit in self.in_sample_dataset.get_units()["features"]
+        ]
         outcomes = self.outcome_generator.generate_outcomes_for_units(
             pca_features=self.in_sample_dataset.get_units()["pca_features"],
             unit_features=self.in_sample_dataset.get_units()["features"],
@@ -39,8 +42,10 @@ class TCGADataGenerator(DataGenerator):
         self.in_sample_dataset.add_outcomes(outcomes=outcomes)
 
     def get_unseen_treatments(
-        self, in_sample_treatment_assignments, out_sample_treatment_assignments
-    ):
+        self,
+        in_sample_treatment_assignments: list,
+        out_sample_treatment_assignments: list,
+    ) -> list:
         in_sample_ids = get_treatment_ids(in_sample_treatment_assignments)
         out_sample_ids = get_treatment_ids(out_sample_treatment_assignments)
         all_test_ids = np.concatenate((in_sample_ids, out_sample_ids)).flatten()
@@ -49,10 +54,14 @@ class TCGADataGenerator(DataGenerator):
         set_unseen_test_ids = set_test_ids - set_train_ids
         return list(set_unseen_test_ids)
 
-    def generate_test_units(self, test_units, test_assignments):
+    def generate_test_units(
+        self, test_units: dict, test_assignments: List[Dict]
+    ) -> List[TestUnit]:
         test_data = []
         test_assignments_ids = get_treatment_ids(test_assignments)
-        treatment_propensities = get_treatment_propensities(test_assignments)
+        treatment_propensities = [
+            unit_treatments["propensities"] for unit_treatments in test_assignments
+        ]
         for i in range(len(test_units["ids"])):
             true_outcomes = self.outcome_generator.generate_outcomes_for_unit(
                 pca_features=test_units["pca_features"][i],

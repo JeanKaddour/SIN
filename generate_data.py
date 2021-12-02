@@ -16,7 +16,7 @@ def parse_default_args() -> argparse.Namespace:
         "--name", type=str, default="{:%Y_%m_%d_%H_%M_%S_%f}".format(datetime.now())
     )
     parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
-    parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument(
         "--data_path",

@@ -230,12 +230,11 @@ def create_pt_geometric_dataset(
         )
         one_hot_encoding = torch.FloatTensor(one_hot_encoding)
         edge_index = torch.LongTensor(edge_index)
-        test = unit_tensor[i]
-        test_2 = torch.unsqueeze(unit_tensor[i], 0)
+        x = torch.Tensor(np.array(features))
         if len(edge_index.shape) == 2:
             edge_index = edge_index.transpose(1, 0)
         graph_data = Data(
-            x=torch.Tensor(np.array(features)),
+            x=x,
             edge_index=edge_index,
             covariates=torch.unsqueeze(unit_tensor[i], 0),
             one_hot_encoding=one_hot_encoding,

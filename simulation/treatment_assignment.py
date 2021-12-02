@@ -56,7 +56,7 @@ class RandomTAP(TreatmentAssignmentPolicy):
             )
         return weights
 
-    def assign_treatment(self, unit: np.ndarray):
+    def assign_treatment(self, unit: np.ndarray) -> int:
         propensity_probabilities = softmax(
             self.bias * np.matmul(self.weights, self.preprocess_covariates(unit))
         )
@@ -65,7 +65,7 @@ class RandomTAP(TreatmentAssignmentPolicy):
         )
         return assigned_treatment
 
-    def preprocess_covariates(self, covariates: np.ndarray):
+    def preprocess_covariates(self, covariates: np.ndarray) -> np.ndarray:
         if self.policy == "squared":
             return covariates ** 2
         return covariates
@@ -83,7 +83,7 @@ class RandomTAP(TreatmentAssignmentPolicy):
 
     def __get_most_likely_assignments_for_unit(
         self, unit: np.ndarray, num_test_treatments_per_unit: int = 3
-    ):
+    ) -> dict:
         propensity_probabilities = softmax(
             np.matmul(self.weights, self.preprocess_covariates(unit))
         )

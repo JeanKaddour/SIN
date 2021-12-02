@@ -24,7 +24,7 @@ def parse_default_args() -> argparse.Namespace:
         default="sin",
         choices=["sin", "gnn", "graphite", "cat", "zero"],
     )
-    parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument(
         "--log_interval",
@@ -57,7 +57,7 @@ def parse_default_args() -> argparse.Namespace:
     return args
 
 
-def main():
+def main() -> None:
     args = parse_default_args()
     project_name = (
         f"sin_{DATE_STR}-{args.task}-ABL"

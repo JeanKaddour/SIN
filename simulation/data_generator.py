@@ -16,12 +16,6 @@ def get_treatment_ids(treatment_assignments: List[Dict]):
     ]
 
 
-def get_treatment_propensities(treatment_assignments: List[Dict]):
-    return [
-        unit_treatments["propensities"] for unit_treatments in treatment_assignments
-    ]
-
-
 class AbstractDataGenerator(ABC):
     def __init__(
         self,
@@ -77,9 +71,12 @@ class DataGenerator(AbstractDataGenerator):
         )
 
     def generate_train_data(self) -> None:
-        treatment_ids = self.get_train_assignments(
-            units=self.in_sample_dataset.get_units()
-        )
+        treatment_ids = [
+            self.treatment_assignment_policy.assign_treatment(unit)
+            for unit in self.in_sample_dataset.get_units()
+        ]
+
+        print(np.unique(treatment_ids))
         outcomes = self.outcome_generator.generate_outcomes_for_units(
             units=self.in_sample_dataset.get_units(), treatment_ids=treatment_ids
         )
@@ -104,7 +101,9 @@ class DataGenerator(AbstractDataGenerator):
     ) -> List[TestUnit]:
         test_data = []
         test_assignments_ids = get_treatment_ids(test_assignments)
-        treatment_propensities = get_treatment_propensities(test_assignments)
+        treatment_propensities = [
+            unit_treatments["propensities"] for unit_treatments in test_assignments
+        ]
         for i in range(len(test_units)):
             true_outcomes = self.outcome_generator.generate_outcomes_for_unit(
                 unit=test_units[i], treatment_ids=test_assignments_ids[i]
