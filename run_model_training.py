@@ -17,7 +17,7 @@ DATE_STR = "{:%Y_%m_%d}".format(datetime.now())
 def parse_default_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="StructuredInterventionNetworks")
     parser.add_argument("--name", type=str, default=TIME_STR)
-    parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
+    parser.add_argument("--task", type=str, default="tcga", choices=["sw", "tcga"])
     parser.add_argument(
         "--model",
         type=str,

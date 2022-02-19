@@ -59,7 +59,7 @@ def add_params(parser):
         choices=["no", "squared"],
         help="Preprocessing of covariates for treatment assignment.",
     )
-    parser.add_argument("--bias", type=float, default=0.3, help="Bias strength")
+    parser.add_argument("--bias", type=float, default=0.1, help="Bias strength")
     parser.add_argument(
         "--treatment_assignment_matrix_distribution",
         type=str,

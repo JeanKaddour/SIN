@@ -16,7 +16,7 @@ def add_params(parser):
         help="Number of available treatments",
     )
     parser.add_argument("--batch_size", type=int, default=1000)
-    parser.add_argument("--bias", type=float, default=0.3, help="Bias strength")
+    parser.add_argument("--bias", type=float, default=0.1, help="Bias strength")
     # -------------------------------------------------- Training --------------------------------------------------
 
     parser.add_argument("--lr", type=float, default=1e-3)
