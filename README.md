@@ -4,11 +4,7 @@
 
 # Abstract
 
-We address the estimation of conditional average treatment effects (CATEs) when treatments are graph-structured (e.g.,
-molecular graphs of drugs). Given a weak condition on the effect, we propose a plug-in estimator that decomposes CATE
-estimation into separate, simpler optimization problems. Our estimator (a) isolates the causal estimands (reducing
-regularization bias), and (b) allows one to plug in arbitrary models for learning. In experiments with small-world and
-molecular graphs, we show that our approach outperforms prior approaches and is robust to varying selection biases.
+We address the estimation of conditional average treatment effects (CATEs) for structured treatments (e.g., graphs, images, texts). Given a weak condition on the effect, we propose the generalized Robinson decomposition, which (i) isolates the causal estimand (reducing regularization bias), (ii) allows one to plug in arbitrary models for learning, and (iii) possesses a quasi-oracle convergence guarantee under mild assumptions. In experiments with small-world and molecular graphs we demonstrate that our approach outperforms prior work in CATE estimation.
 
 # Requirements
 
