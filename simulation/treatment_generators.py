@@ -43,7 +43,9 @@ def generate_id_to_graph_dict_tcga(args: argparse.Namespace) -> dict:
         c_size, features, edge_index, edge_types = smiles_to_graph(
             raw_molecule["smiles"]
         )
-        if any(i <= 1 for i in [c_size, len(features), len(edge_types), len(edge_index)]):
+        if any(
+            i <= 1 for i in [c_size, len(features), len(edge_types), len(edge_index)]
+        ):
             continue
         id_to_graph_dict[i] = {
             "c_size": c_size,

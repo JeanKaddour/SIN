@@ -2,10 +2,10 @@ import logging
 from argparse import Namespace
 
 import torch.nn.functional as F
+import wandb
 from torch import Tensor, nn
 from torch_geometric.data.batch import Batch
 
-import wandb
 from models.building_blocks.como import COMONet
 from models.building_blocks.covariates_feature_extractor import \
     CovariatesFeatureExtractor

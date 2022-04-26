@@ -37,4 +37,4 @@ parameters:
     values:
       - 0.001
       - 0.0005
-program: run_model.py
+program: run_model_training.py

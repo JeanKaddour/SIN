@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Union
 
 import wandb
+
 from configs.utils import str2bool
 from experiments.utils import read_yaml
 
@@ -13,7 +14,7 @@ PATH_TO_CONFIGS = "./configs/sweeps/"
 
 
 def parse_default_args():
-    parser = argparse.ArgumentParser(description="GraphInterventionNetworks")
+    parser = argparse.ArgumentParser(description="StructuredInterventionNetworks")
     parser.add_argument("--name", type=str, default=TIME_STR)
     parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
     parser.add_argument(

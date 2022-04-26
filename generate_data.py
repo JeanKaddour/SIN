@@ -11,7 +11,7 @@ from simulation.utils import (create_dataset, get_data_generator,
 
 
 def parse_default_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="GraphInterventionNetworks")
+    parser = argparse.ArgumentParser(description="StructuredInterventionNetworks")
     parser.add_argument(
         "--name", type=str, default="{:%Y_%m_%d_%H_%M_%S_%f}".format(datetime.now())
     )

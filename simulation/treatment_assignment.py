@@ -67,7 +67,7 @@ class RandomTAP(TreatmentAssignmentPolicy):
 
     def preprocess_covariates(self, covariates: np.ndarray) -> np.ndarray:
         if self.policy == "squared":
-            return covariates ** 2
+            return covariates**2
         return covariates
 
     def get_assignments_for_unit(

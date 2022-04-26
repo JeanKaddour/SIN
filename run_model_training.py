@@ -2,8 +2,8 @@ import argparse
 from datetime import datetime
 
 import torch
-
 import wandb
+
 from configs.run_model import sw, tcga
 from configs.utils import str2bool
 from experiments.logger import create_logger

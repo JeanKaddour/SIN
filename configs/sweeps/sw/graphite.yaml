@@ -46,4 +46,4 @@ parameters:
       - 10
       - 100
       - 1000
-program: run_model.py
+program: run_model_training.py

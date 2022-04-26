@@ -2,8 +2,8 @@ import argparse
 from datetime import datetime
 
 import torch
-
 import wandb
+
 from configs.run_model import sw, tcga
 from data.dataset import TestUnits
 from data.utils import one_of_k_encoding
@@ -19,7 +19,7 @@ date_str = "{:%Y_%m_%d}".format(datetime.now())
 
 
 def parse_default_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="GraphInterventionNetworks")
+    parser = argparse.ArgumentParser(description="StructuredInterventionNetworks")
     parser.add_argument("--name", type=str, default=time_str)
     parser.add_argument("--task", type=str, default="sw", choices=["sw", "tcga"])
     parser.add_argument("--model", type=str, default="gnn", choices=["gnn"])

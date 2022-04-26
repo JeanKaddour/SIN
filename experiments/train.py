@@ -3,9 +3,9 @@ from argparse import Namespace
 from typing import Tuple
 
 import torch
+import wandb
 from torch_geometric.loader import DataLoader
 
-import wandb
 from data.dataset import TestUnits
 from experiments.early_stopping import EarlyStoppingCriterion
 from experiments.evaluate import test_evaluation, valid_evaluation

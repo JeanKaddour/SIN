@@ -1,9 +1,8 @@
 import logging
 
+import wandb
 from torch import nn
 from torch_geometric.data.batch import Batch
-
-import wandb
 
 
 class NeuralNetworkEstimator(nn.Module):
